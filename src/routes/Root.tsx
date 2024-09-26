@@ -43,6 +43,9 @@ export default function Root() {
             <li>
               <Link to={`converter/`}>Currencies Converter</Link>
             </li>
+            <li>
+              <Link to={`controlled-inputs/`}>Controlled Inputs</Link>
+            </li>
           </ul>
         </nav>
       </div>

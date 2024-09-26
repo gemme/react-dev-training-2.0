@@ -1,12 +1,15 @@
 import React from 'react';
+import _ from 'lodash';
 
 import { Button } from "semantic-ui-react";
 
 export const Calculator = () => {
 
+  const transformedArray = _.pull(['a', 'b', 'c', 'a', 'b', 'c'], 'a', 'c')
+
   return (
     <>
-
+      {transformedArray}
       <div>
         <input type="text" value="0" />
       </div>
