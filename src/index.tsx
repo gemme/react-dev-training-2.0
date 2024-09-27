@@ -16,7 +16,10 @@ import { StarWars } from "./routes/StarWars";
 import { Flicker } from "./routes/Flicker";
 import { Home } from "./routes/Home";
 import { Converter } from "./routes/Converter";
+import { Redux } from "./routes/Redux";
 import PropDrilling from "./routes/PropDrilling";
+import store from './app/store'
+import { Provider } from 'react-redux'
 import "./index.css";
 
 const router = createBrowserRouter([
@@ -57,7 +60,10 @@ const router = createBrowserRouter([
                 path: "controlled-inputs/",
                 element: <ControlledInputs />,
             },
-
+            {
+                path: "redux/",
+                element: <Redux />,
+            },
         ],
     },
 ]);
@@ -68,5 +74,11 @@ const domNode = document.getElementById('root')!;
 const root = ReactDOM.createRoot(domNode);
 
 root.render(
-    <RouterProvider router={router} />,
+    <React.StrictMode>
+        <Provider store={store}>
+            <RouterProvider router={router} />
+        </Provider>
+
+    </React.StrictMode>
+    ,
 )

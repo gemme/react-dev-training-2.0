@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Outlet, Link } from "react-router-dom";
+import { NumUsers } from '../components/NumUsers';
 
 export default function Root() {
   return (
@@ -46,10 +47,14 @@ export default function Root() {
             <li>
               <Link to={`controlled-inputs/`}>Controlled Inputs</Link>
             </li>
+            <li>
+              <Link to={`redux/`}>Redux</Link>
+            </li>
           </ul>
         </nav>
       </div>
       <div id="detail">
+        <NumUsers />
         <Outlet />
       </div>
     </>
