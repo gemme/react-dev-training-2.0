@@ -38,7 +38,7 @@ const stateOptions = [
 
 // useFormStatus, useActioState  experimental  React 19 version
 
-const API_URL = 'https://cab3357c254f1ba77a82.free.beeceptor.com/api/users/';
+const API_URL = 'http://localhost:3000/api/users/';
 
 export const ControlledInputs = () => {
     const [name, setName] = useState<string>('')
@@ -52,6 +52,9 @@ export const ControlledInputs = () => {
     const createUser = async () => {
         const response = await fetch(API_URL, {
             method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify({
                 name,
                 lastName,
@@ -139,7 +142,7 @@ export const ControlledInputs = () => {
                     {
                         users.map(value => {
                             return (
-                                <TableRow>
+                                <TableRow key={value.name}>
                                     <TableCell>
                                         <Label>{value.name}</Label>
                                     </TableCell>

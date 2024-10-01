@@ -1,9 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Suspense, lazy } from 'react';
-import {
-    createRoutesFromElements, createBrowserRouter, RouterProvider, HashRouter, Navigate, Route, Routes, useNavigate, useLocation
-} from 'react-router-dom';
 import ErrorPage from "./routes/ErrorPage";
 import { Calculator } from "./routes/Calculator";
 import { DigitalClock } from "./routes/DigitalClock";
@@ -11,15 +7,15 @@ import { InboxMessages } from "./routes/InboxMessages";
 import { ControlledInputs } from "./routes/ControlledInputs";
 import "./App.css";
 import "semantic-ui-css/semantic.min.css";
-import Root from "./routes/Root";
+import { Root } from "./routes/Root";
 import { StarWars } from "./routes/StarWars";
 import { Flicker } from "./routes/Flicker";
 import { Home } from "./routes/Home";
 import { Converter } from "./routes/Converter";
 import { Redux } from "./routes/Redux";
-import PropDrilling from "./routes/PropDrilling";
 import store from './app/store'
 import { Provider } from 'react-redux'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import "./index.css";
 
 const router = createBrowserRouter([
@@ -37,7 +33,7 @@ const router = createBrowserRouter([
                 element: <StarWars />,
             },
             {
-                path: "inbox/",
+                path: "inbox-messages/",
                 element: <InboxMessages />,
             },
             {
@@ -68,8 +64,6 @@ const router = createBrowserRouter([
     },
 ]);
 
-
-
 const domNode = document.getElementById('root')!;
 const root = ReactDOM.createRoot(domNode);
 
@@ -78,7 +72,6 @@ root.render(
         <Provider store={store}>
             <RouterProvider router={router} />
         </Provider>
-
     </React.StrictMode>
     ,
 )

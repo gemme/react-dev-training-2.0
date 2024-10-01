@@ -17,6 +17,17 @@ import {
     ListDescription
 } from 'semantic-ui-react'
 import './Flicker.css';
+/*
+https://api.flickr.com/services/rest/?
+   method=flickr.photos.search&
+   api_key=${API_KEY_FLICKR}&
+   format=json&
+   text=${searchText}&
+   nojsoncallback=true&
+   per_page=40&
+   extras=url_s
+   */
+
 
 export const Flicker = () => {
 

@@ -1,10 +1,14 @@
 const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
+const { faker } = require("@faker-js/faker");
 
 const app = express();
 
 app.use(cors());
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.send("Hello World");
@@ -35,6 +39,31 @@ app.get("/currencies/base/:base/target/:target", (req, res) => {
         rate: data[base][target],
       });
     });
+});
+
+const users = [
+  {
+    name: "Ernesto",
+    lastName: "Martinez",
+    currency: "EUR",
+    id: "69eab871698eaa8421ec",
+  },
+  {
+    name: "Florinda",
+    lastName: "Mezaa",
+    currency: "MXN",
+    id: "8447d98ef422cd15d471",
+  },
+];
+
+app.get("/api/users", (req, res) => {
+  res.json(users);
+});
+
+app.post("/api/users", (req, res) => {
+  console.log(req.body);
+  users.push({ id: faker.string.uuid(), ...req.body });
+  res.json(users);
 });
 
 app.listen(3000, () => {
