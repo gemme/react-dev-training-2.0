@@ -1,20 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import ErrorPage from "./routes/ErrorPage";
-import { Calculator } from "./routes/Calculator";
-import { DigitalClock } from "./routes/DigitalClock";
-import { InboxMessages } from "./routes/InboxMessages";
-import { ControlledInputs } from "./routes/ControlledInputs";
+import { Forms } from "./routes/Forms";
+import { CounterReducer } from "./routes/CounterReducer";
+import { FormsWithCustomHooks } from "./routes/FormsWithCustomHooks";
+import { FormWithUseRef } from "./routes/FormWithUseRef";
+import { Factorial } from "./routes/Factorial";
+import { ComponentWithUseCallback } from "./routes/ComponentWithUseCallback";
+import { ComponentWithUseContext } from "./routes/ComponentWithUseContext";
 import "./App.css";
 import "semantic-ui-css/semantic.min.css";
 import { Root } from "./routes/Root";
-import { StarWars } from "./routes/StarWars";
-import { Flicker } from "./routes/Flicker";
 import { Home } from "./routes/Home";
 import { Converter } from "./routes/Converter";
-import { Redux } from "./routes/Redux";
-import store from './app/store'
-import { Provider } from 'react-redux'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import "./index.css";
 
@@ -29,36 +27,36 @@ const router = createBrowserRouter([
                 element: <Home />,
             },
             {
-                path: "star-wars/",
-                element: <StarWars />,
-            },
-            {
-                path: "inbox-messages/",
-                element: <InboxMessages />,
-            },
-            {
-                path: "digital-clock/",
-                element: <DigitalClock />,
-            },
-            {
-                path: "calculator/",
-                element: <Calculator />,
-            },
-            {
-                path: "flicker/",
-                element: <Flicker />,
-            },
-            {
                 path: "converter/",
                 element: <Converter />,
             },
             {
-                path: "controlled-inputs/",
-                element: <ControlledInputs />,
+                path: "forms/",
+                element: <Forms />,
             },
             {
-                path: "redux/",
-                element: <Redux />,
+                path: "custom-hooks/",
+                element: <FormsWithCustomHooks />,
+            },
+            {
+                path: "use-reducer/",
+                element: <CounterReducer />,
+            },
+            {
+                path: "use-ref/",
+                element: <FormWithUseRef />,
+            },
+            {
+                path: "use-memo/",
+                element: <Factorial />,
+            },
+            {
+                path: "use-callback/",
+                element: <ComponentWithUseCallback />,
+            },
+            {
+                path: "use-context/",
+                element: <ComponentWithUseContext />,
             },
         ],
     },
@@ -69,9 +67,7 @@ const root = ReactDOM.createRoot(domNode);
 
 root.render(
     <React.StrictMode>
-        <Provider store={store}>
-            <RouterProvider router={router} />
-        </Provider>
+        <RouterProvider router={router} />
     </React.StrictMode>
     ,
 )

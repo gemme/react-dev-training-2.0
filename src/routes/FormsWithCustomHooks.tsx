@@ -14,7 +14,6 @@ import {
     Menu,
     Table,
 } from 'semantic-ui-react'
-import { useDispatch } from 'react-redux'
 
 const stateOptions = [
     {
@@ -40,14 +39,12 @@ const stateOptions = [
 
 const API_URL = 'http://localhost:3000/api/users/';
 
-export const ControlledInputs = () => {
+export const FormsWithCustomHooks = () => {
     const [name, setName] = useState<string>('')
     const [lastName, setLastName] = useState<string>('')
     const [currency, setCurrency] = useState<string>('')
 
     const [users, setUsers] = useState([])
-
-    const dispatch = useDispatch()
 
     const createUser = async () => {
         const response = await fetch(API_URL, {
@@ -76,10 +73,6 @@ export const ControlledInputs = () => {
         if (response.ok) {
             const data = await response.json();
             console.log('data', data)
-            dispatch({
-                type: 'ADD_TOTAL_USERS',
-                payload: data.length
-            })
             setUsers(data);
         }
     }
