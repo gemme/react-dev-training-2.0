@@ -87,9 +87,7 @@ export const Forms = () => {
     }
 
     useEffect(() => {
-
         getUsers();
-
     }, [])
 
 

@@ -13,7 +13,10 @@ import {
     Label,
     Menu,
     Table,
+    Dimmer, Loader, Image, Segment
 } from 'semantic-ui-react'
+import { useFetch } from '../hooks/useFetch';
+import { useMutation } from '../hooks/useMutation';
 
 const stateOptions = [
     {
@@ -31,50 +34,39 @@ const stateOptions = [
     }
 ]
 
-//const users = [{ "name": "Ernesto", "lastName": "Martinez", "currency": "EUR", "id": "2ccbfef23451e4ce7554" }, { "name": "Ernesto", "lastName": "Martinez", "currency": "EUR", "id": "2ccbfef23451e4ce7554" }];
-// react query
-// react hook forms
-
-// useFormStatus, useActioState  experimental  React 19 version
-
 const API_URL = 'http://localhost:3000/api/users/';
+
+interface Users {
+    name: string;
+    lastName: string;
+    currency: string;
+}
 
 export const FormsWithCustomHooks = () => {
     const [name, setName] = useState<string>('')
-    const [lastName, setLastName] = useState<string>('')
-    const [currency, setCurrency] = useState<string>('')
+    const [lastName, setLastName] = useState<string>('');
+    const [currency, setCurrency] = useState<string>('');
 
-    const [users, setUsers] = useState([])
+    const { data: users, error: usersError, isLoading: usersIsLoading, refetch } = useFetch<Users>(API_URL);
+    const { asyncMutate } = useMutation<Users>(API_URL, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+    });
+
 
     const createUser = async () => {
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                name,
-                lastName,
-                currency
-            })
-        })
-
-        if (response.ok) {
-            const data = await response.json();
-            console.log('data', data)
-        }
+        const data = await asyncMutate({
+            name,
+            lastName,
+            currency
+        });
+        console.log(data);
     }
 
     const getUsers = async () => {
-        const response = await fetch(API_URL, {
-            method: 'GET',
-        })
-
-        if (response.ok) {
-            const data = await response.json();
-            console.log('data', data)
-            setUsers(data);
-        }
+        refetch()
     }
 
     const processApi = async () => {
@@ -85,14 +77,6 @@ export const FormsWithCustomHooks = () => {
             console.error(error);
         }
     }
-
-    useEffect(() => {
-
-        getUsers();
-
-    }, [])
-
-
 
     return (
         <>
@@ -121,53 +105,67 @@ export const FormsWithCustomHooks = () => {
                 </FormField>
                 <Button type='submit'>Submit</Button>
             </Form>
+            {usersIsLoading
+                &&
+                <div >
+                    <Segment style={{
+                        height: 300
+                    }}>
+                        <Dimmer active>
+                            <Loader>Loading</Loader>
+                        </Dimmer>
+                    </Segment>
+                </div>
+            }
+            {!usersIsLoading
+                &&
+                <Table celled>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHeaderCell>First Name</TableHeaderCell>
+                            <TableHeaderCell>Last Name</TableHeaderCell>
+                            <TableHeaderCell>Currency</TableHeaderCell>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {usersError
+                            ? <p>{usersError}</p>
+                            :
+                            users?.map(value => {
+                                return (
+                                    <TableRow key={value.name}>
+                                        <TableCell>
+                                            <Label>{value.name}</Label>
+                                        </TableCell>
+                                        <TableCell>{value.lastName}</TableCell>
+                                        <TableCell>{value.currency}</TableCell>
+                                    </TableRow>
+                                )
+                            })
+                        }
 
-            <Table celled>
-                <TableHeader>
-                    <TableRow>
-                        <TableHeaderCell>First Name</TableHeaderCell>
-                        <TableHeaderCell>Last Name</TableHeaderCell>
-                        <TableHeaderCell>Currency</TableHeaderCell>
-                    </TableRow>
-                </TableHeader>
+                    </TableBody>
 
-                <TableBody>
-                    {
-                        users.map(value => {
-                            return (
-                                <TableRow key={value.name}>
-                                    <TableCell>
-                                        <Label>{value.name}</Label>
-                                    </TableCell>
-                                    <TableCell>{value.lastName}</TableCell>
-                                    <TableCell>{value.currency}</TableCell>
-                                </TableRow>
-                            )
-                        })
-                    }
-
-                </TableBody>
-
-                <TableFooter>
-                    <TableRow>
-                        <TableHeaderCell colSpan='3'>
-                            <Menu floated='right' pagination>
-                                <MenuItem as='a' icon>
-                                    <Icon name='chevron left' />
-                                </MenuItem>
-                                <MenuItem as='a'>1</MenuItem>
-                                <MenuItem as='a'>2</MenuItem>
-                                <MenuItem as='a'>3</MenuItem>
-                                <MenuItem as='a'>4</MenuItem>
-                                <MenuItem as='a' icon>
-                                    <Icon name='chevron right' />
-                                </MenuItem>
-                            </Menu>
-                        </TableHeaderCell>
-                    </TableRow>
-                </TableFooter>
-            </Table>
-
+                    <TableFooter>
+                        <TableRow>
+                            <TableHeaderCell colSpan='3'>
+                                <Menu floated='right' pagination>
+                                    <MenuItem as='a' icon>
+                                        <Icon name='chevron left' />
+                                    </MenuItem>
+                                    <MenuItem as='a'>1</MenuItem>
+                                    <MenuItem as='a'>2</MenuItem>
+                                    <MenuItem as='a'>3</MenuItem>
+                                    <MenuItem as='a'>4</MenuItem>
+                                    <MenuItem as='a' icon>
+                                        <Icon name='chevron right' />
+                                    </MenuItem>
+                                </Menu>
+                            </TableHeaderCell>
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            }
         </>
     );
 }
