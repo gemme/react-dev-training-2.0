@@ -66,6 +66,32 @@ app.post("/api/users", (req, res) => {
   res.json(users);
 });
 
+const getUsers = () => {
+  for (let i = 0; i < 20; i++) {
+    users.push({
+      id: faker.string.uuid(),
+      name: faker.person.firstName(),
+      lastName: faker.person.lastName(),
+      currency: faker.finance.currencyCode(),
+    });
+  }
+  return users;
+};
+
+app.get("/api/persons", (req, res) => {
+  const search = req.query.search;
+
+  const _users = getUsers();
+
+  if (!search) return res.json(_users);
+
+  res.json(
+    _users.filter((user) =>
+      user.name.toLowerCase().includes(search.toLowerCase())
+    )
+  );
+});
+
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });

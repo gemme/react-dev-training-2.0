@@ -8,6 +8,7 @@ import { FormWithUseRef } from "./routes/FormWithUseRef";
 import { Factorial } from "./routes/Factorial";
 import { ComponentWithUseCallback } from "./routes/ComponentWithUseCallback";
 import { ComponentWithUseContext } from "./routes/ComponentWithUseContext";
+import { SearchPerson } from "./routes/SearchPerson";
 import "./App.css";
 import "semantic-ui-css/semantic.min.css";
 import { Root } from "./routes/Root";
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
             {
                 path: "use-context/",
                 element: <ComponentWithUseContext />,
+            },
+            {
+                path: "use-debounce/",
+                element: <SearchPerson />,
             },
         ],
     },

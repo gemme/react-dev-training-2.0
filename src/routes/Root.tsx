@@ -33,6 +33,9 @@ export const Root = () => {
                         <li>
                             <Link to={`use-context/`}>useContext hook</Link>
                         </li>
+                        <li>
+                            <Link to={`use-debounce`}>useDebounce hook</Link>
+                        </li>
                     </ul>
                 </nav>
             </div>
