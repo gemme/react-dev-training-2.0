@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 export const useFetch = <T>(url: string) => {
   const [data, setData] = useState<T[]>([]);
   const [error, setError] = useState(undefined);
   const [isLoading, setIsLoading] = useState(false);
 
-  const callAPi = () => {
+  const callApi = useCallback(() => {
     setIsLoading(true);
     fetch(url)
       .then((response) => {
@@ -15,7 +15,7 @@ export const useFetch = <T>(url: string) => {
         throw new Error("Error in the response");
       })
       .then(async (data) => {
-        await new Promise((resolve) => setTimeout(resolve, 3000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         setData(data);
       })
       .catch((error) => {
@@ -24,21 +24,21 @@ export const useFetch = <T>(url: string) => {
       .finally(() => {
         setIsLoading(false);
       });
-  };
-
-  useEffect(() => {
-    callAPi();
   }, [url]);
 
-  const refetch = async () => {
-    callAPi();
-  };
+  useEffect(() => {
+    callApi();
+  }, [url]);
+
+  //   const refetch = async () => {
+  //     callApi();
+  //   };
 
   return {
     data,
     error,
     isLoading,
-    refetch,
+    refetch: callApi,
   };
 };
 

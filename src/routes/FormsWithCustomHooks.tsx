@@ -17,6 +17,7 @@ import {
 } from 'semantic-ui-react'
 import { useFetch } from '../hooks/useFetch';
 import { useMutation } from '../hooks/useMutation';
+import { useForm } from '../hooks/useForm';
 
 const stateOptions = [
     {
@@ -43,10 +44,15 @@ interface Users {
 }
 
 export const FormsWithCustomHooks = () => {
-    const [name, setName] = useState<string>('')
+    /* const [name, setName] = useState<string>('')
     const [lastName, setLastName] = useState<string>('');
-    const [currency, setCurrency] = useState<string>('');
-
+    const [currency, setCurrency] = useState<string>(''); */
+    const { values, handleChange, resetForm } = useForm<Users>({
+        name: '',
+        lastName: '',
+        currency: ''
+    });
+    const { name, lastName, currency } = values;
     const { data: users, error: usersError, isLoading: usersIsLoading, refetch } = useFetch<Users>(API_URL);
     const { asyncMutate } = useMutation<Users>(API_URL, {
         method: 'POST',
@@ -63,6 +69,7 @@ export const FormsWithCustomHooks = () => {
             currency
         });
         console.log(data);
+        resetForm();
     }
 
     const getUsers = async () => {
@@ -87,20 +94,30 @@ export const FormsWithCustomHooks = () => {
             }}>
                 <FormField>
                     <label>First Name</label>
-                    <input type='text' value={name} onChange={(event) => {
-                        setName(event.target.value);
+                    <input type='text' value={name} name='name' onChange={(event) => {
+                        //setName(event.target.value);
+                        console.log('event', event);
+                        handleChange(event)
                     }} />
                 </FormField>
                 <FormField>
                     <label>Last Name</label>
-                    <input type='text' value={lastName} onChange={(event) => {
-                        setLastName(event.target.value);
+                    <input type='text' value={lastName} name='lastName' onChange={(event) => {
+                        //setLastName(event.target.value);
+                        handleChange(event);
                     }} />
                 </FormField>
                 <FormField>
                     <label>Currencies</label>
-                    <Dropdown placeholder='Currencies' search selection options={stateOptions} onChange={(event, data) => {
-                        setCurrency(data.value);
+                    <Dropdown placeholder='Currencies' name='currency' search selection options={stateOptions} onChange={(event, data) => {
+                        //setCurrency(data.value);
+                        const _event = {
+                            target: {
+                                name: data.name,
+                                value: data.value
+                            }
+                        }
+                        handleChange(_event);
                     }} />
                 </FormField>
                 <Button type='submit'>Submit</Button>
