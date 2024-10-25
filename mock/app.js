@@ -2,8 +2,21 @@ const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
 const { faker } = require("@faker-js/faker");
+const multer = require("multer");
 
 const app = express();
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // Ensure this directory exists
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 app.use(cors());
 
@@ -66,30 +79,39 @@ app.post("/api/users", (req, res) => {
   res.json(users);
 });
 
+const persons = [];
+
 const getUsers = () => {
-  for (let i = 0; i < 20; i++) {
-    users.push({
+  for (let i = 0; i < 40; i++) {
+    persons.push({
       id: faker.string.uuid(),
       name: faker.person.firstName(),
       lastName: faker.person.lastName(),
       currency: faker.finance.currencyCode(),
     });
   }
-  return users;
+  return persons;
 };
+
+getUsers();
 
 app.get("/api/persons", (req, res) => {
   const search = req.query.search;
 
-  const _users = getUsers();
-
-  if (!search) return res.json(_users);
+  if (!search) return res.json(persons);
 
   res.json(
-    _users.filter((user) =>
+    persons.filter((user) =>
       user.name.toLowerCase().includes(search.toLowerCase())
     )
   );
+});
+
+app.post("/api/fileupload", upload.single("file"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).send("No file uploaded.");
+  }
+  res.status(200).send("File uploaded successfully.");
 });
 
 app.listen(3000, () => {

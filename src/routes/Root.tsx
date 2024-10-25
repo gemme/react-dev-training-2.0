@@ -36,6 +36,12 @@ export const Root = () => {
                         <li>
                             <Link to={`use-debounce`}>useDebounce hook</Link>
                         </li>
+                        <li>
+                            <Link to={`upload-file`}>upload file</Link>
+                        </li>
+                        <li>
+                            <Link to={`users`}>Users</Link>
+                        </li>
                     </ul>
                 </nav>
             </div>

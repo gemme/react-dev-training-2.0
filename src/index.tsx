@@ -9,6 +9,8 @@ import { Factorial } from "./routes/Factorial";
 import { ComponentWithUseCallback } from "./routes/ComponentWithUseCallback";
 import { ComponentWithUseContext } from "./routes/ComponentWithUseContext";
 import { SearchPerson } from "./routes/SearchPerson";
+import { UploadFile } from "./routes/UploadFile";
+import { UsersView } from "./routes/UsersView";
 import "./App.css";
 import "semantic-ui-css/semantic.min.css";
 import { Root } from "./routes/Root";
@@ -16,6 +18,7 @@ import { Home } from "./routes/Home";
 import { Converter } from "./routes/Converter";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import "./index.css";
+import { UsersFormView } from './routes/UsersFormView';
 
 const router = createBrowserRouter([
     {
@@ -62,6 +65,18 @@ const router = createBrowserRouter([
             {
                 path: "use-debounce/",
                 element: <SearchPerson />,
+            },
+            {
+                path: "upload-file/",
+                element: <UploadFile />,
+            },
+            {
+                path: "users/",
+                element: <UsersView />,
+            },
+            {
+                path: "users-create/",
+                element: <UsersFormView />,
             },
         ],
     },

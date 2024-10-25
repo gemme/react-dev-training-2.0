@@ -1,23 +1,15 @@
 import { create } from 'lodash';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, forwardRef, RefObject } from 'react';
 import { FormField, Button, Checkbox, Form, Dropdown } from 'semantic-ui-react'
 import {
-    TableRow,
-    TableHeaderCell,
-    TableHeader,
-    TableFooter,
-    TableCell,
-    TableBody,
-    MenuItem,
-    Icon,
-    Label,
-    Menu,
-    Table,
-    Dimmer, Loader, Image, Segment
+    Dimmer, Loader, Segment
 } from 'semantic-ui-react'
 import { useFetch } from '../hooks/useFetch';
 import { useMutation } from '../hooks/useMutation';
 import { useForm } from '../hooks/useForm';
+import { CustomInput } from '../components/CustomInput';
+import { UsersTable } from '../components/UsersTable';
+import { type Users } from '../types/users';
 
 const stateOptions = [
     {
@@ -37,16 +29,18 @@ const stateOptions = [
 
 const API_URL = 'http://localhost:3000/api/users/';
 
-interface Users {
-    name: string;
-    lastName: string;
-    currency: string;
-}
 
 export const FormsWithCustomHooks = () => {
     /* const [name, setName] = useState<string>('')
     const [lastName, setLastName] = useState<string>('');
     const [currency, setCurrency] = useState<string>(''); */
+    const [error, setError] = useState({
+        name: '',
+        lastName: '',
+        currency: ''
+    });
+    const nameRef = useRef<HTMLInputElement | null>(null);
+    const lastNameRef = useRef<any | null>(null);
     const { values, handleChange, resetForm } = useForm<Users>({
         name: '',
         lastName: '',
@@ -63,6 +57,7 @@ export const FormsWithCustomHooks = () => {
 
 
     const createUser = async () => {
+
         const data = await asyncMutate({
             name,
             lastName,
@@ -70,6 +65,11 @@ export const FormsWithCustomHooks = () => {
         });
         console.log(data);
         resetForm();
+        setError({
+            name: '',
+            lastName: '',
+            currency: ''
+        })
     }
 
     const getUsers = async () => {
@@ -78,6 +78,41 @@ export const FormsWithCustomHooks = () => {
 
     const processApi = async () => {
         try {
+            if (name.length < 5) {
+                setError(prevState => {
+                    return {
+                        ...prevState,
+                        name: 'name must be at least 5 characters length'
+                    }
+                });
+                nameRef?.current?.focus?.();
+                return;
+            } else if (!error.lastName) {
+                setError(prevState => {
+                    return {
+                        ...prevState,
+                        name: ''
+                    }
+                });
+            }
+            if (lastName.length < 5) {
+                setError(prevState => {
+                    return {
+                        ...prevState,
+                        lastName: 'last name must be at least 5 characters length'
+                    }
+                });
+                lastNameRef?.current?.focus?.();
+                return;
+            } else if (!error.lastName) {
+                setError(prevState => {
+                    return {
+                        ...prevState,
+                        lastName: ''
+                    }
+                });
+            }
+
             await createUser();
             await getUsers();
         } catch (error) {
@@ -92,20 +127,11 @@ export const FormsWithCustomHooks = () => {
                 event.preventDefault();
                 processApi();
             }}>
-                <FormField>
-                    <label>First Name</label>
-                    <input type='text' value={name} name='name' onChange={(event) => {
-                        //setName(event.target.value);
-                        console.log('event', event);
-                        handleChange(event)
-                    }} />
+                <FormField >
+                    <CustomInput label={'Name'} ref={nameRef} type='text' value={name} name='name' handleChange={handleChange} error={error.name} />
                 </FormField>
                 <FormField>
-                    <label>Last Name</label>
-                    <input type='text' value={lastName} name='lastName' onChange={(event) => {
-                        //setLastName(event.target.value);
-                        handleChange(event);
-                    }} />
+                    <CustomInput label={'Last name'} ref={lastNameRef} type='text' value={lastName} name='lastName' handleChange={handleChange} error={error.lastName} />
                 </FormField>
                 <FormField>
                     <label>Currencies</label>
@@ -136,52 +162,11 @@ export const FormsWithCustomHooks = () => {
             }
             {!usersIsLoading
                 &&
-                <Table celled>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHeaderCell>First Name</TableHeaderCell>
-                            <TableHeaderCell>Last Name</TableHeaderCell>
-                            <TableHeaderCell>Currency</TableHeaderCell>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {usersError
-                            ? <p>{usersError}</p>
-                            :
-                            users?.map(value => {
-                                return (
-                                    <TableRow key={value.name}>
-                                        <TableCell>
-                                            <Label>{value.name}</Label>
-                                        </TableCell>
-                                        <TableCell>{value.lastName}</TableCell>
-                                        <TableCell>{value.currency}</TableCell>
-                                    </TableRow>
-                                )
-                            })
-                        }
-
-                    </TableBody>
-
-                    <TableFooter>
-                        <TableRow>
-                            <TableHeaderCell colSpan='3'>
-                                <Menu floated='right' pagination>
-                                    <MenuItem as='a' icon>
-                                        <Icon name='chevron left' />
-                                    </MenuItem>
-                                    <MenuItem as='a'>1</MenuItem>
-                                    <MenuItem as='a'>2</MenuItem>
-                                    <MenuItem as='a'>3</MenuItem>
-                                    <MenuItem as='a'>4</MenuItem>
-                                    <MenuItem as='a' icon>
-                                        <Icon name='chevron right' />
-                                    </MenuItem>
-                                </Menu>
-                            </TableHeaderCell>
-                        </TableRow>
-                    </TableFooter>
-                </Table>
+                <UsersTable
+                    users={users}
+                    usersError={usersError ?? ''}
+                    headers={['Name', 'Last Name', 'Currency']}
+                />
             }
         </>
     );

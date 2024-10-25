@@ -9,7 +9,7 @@ export function Converter(/* props */) {
   const [base, setBase] = useState('');
   const [target, setTarget] = useState('');
   const [amount, setAmount] = useState(0);
-  const [currencies, setCurrencies] = useState([]); 
+  const [currencies, setCurrencies] = useState([]);
   const [rate, setRate] = useState(0);
 
   useEffect(() => {
@@ -18,23 +18,23 @@ export function Converter(/* props */) {
       .then(data => {
 
         setCurrencies(Object.entries(data) as any);
-    });      
+      });
   }, []);
 
   useEffect(() => {
-    if (base !== '' && target !=='') {
+    if (base !== '' && target !== '') {
       fetch(`${API_URL}/base/${base}/target/${target}`)
         .then(res => res.json())
         .then(data => {
 
           setRate(data.rate);
-      });      
+        });
     }
   }, [base, target]);
 
   const onChangeSelect = (ev: any) => {
-    const {name, value} = ev.target;
-    name == 'targetcurrency' ?  setTarget(value) : setBase(value)
+    const { name, value } = ev.target;
+    name == 'targetcurrency' ? setTarget(value) : setBase(value)
   }
 
   return (
@@ -48,7 +48,7 @@ export function Converter(/* props */) {
         />
         <span>
           Conversion result: {
-            new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD'}).format(rate*amount)
+            new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(rate * amount)
           }
         </span>
       </div>
@@ -62,11 +62,11 @@ export function Converter(/* props */) {
             {currencies.map(val => {
               const [key, label] = val;
 
-                 return <option key={key} value={key}>
-                                {label}
-                              </option>
+              return <option key={key} value={key}>
+                {label}
+              </option>
             })}
-            
+
           </select>
         </div>
         <div className="selectors">
@@ -77,9 +77,9 @@ export function Converter(/* props */) {
           >
             {currencies.map(val => {
               const [key, label] = val;
-                 return <option key={key} value={key}>
-                                {label}
-                              </option>
+              return <option key={key} value={key}>
+                {label}
+              </option>
             })}
           </select>
         </div>
