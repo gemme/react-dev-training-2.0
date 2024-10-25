@@ -1,5 +1,5 @@
 import { create } from 'lodash';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { FormField, Button, Checkbox, Form, Dropdown } from 'semantic-ui-react'
 import {
     TableRow,
@@ -38,11 +38,35 @@ const stateOptions = [
 // useFormStatus, useActioState  experimental  React 19 version
 
 const API_URL = 'http://localhost:3000/api/users/';
+const initialState= {
+    name:'',
+    lastName: '',
+    currency: ''
+}
+const reducer = (state: any, action: any) => {
+    let newState = state;
+    switch (action.type) {
+        case 'UPDATE_NAME':
+            newState = {...state, name: action.payload};
+            break;
+        case 'UPDATE_LASTNAME':
+            newState = {...state, lastName: action.payload};
+            break;
+        case 'UPDATE_CURRENCY':
+            newState = {...state, currency: action.payload};
+            break;
+        default:
+            return newState;
+    }
+    return newState;
+}
 
 export const Forms = () => {
-    const [name, setName] = useState<string>('')
-    const [lastName, setLastName] = useState<string>('')
-    const [currency, setCurrency] = useState<string>('')
+    // const [name, setName] = useState<string>('')
+    // const [lastName, setLastName] = useState<string>('')
+    // const [currency, setCurrency] = useState<string>('')
+    const [{name, lastName, currency}, dispatch] = useReducer(reducer, initialState)
+
 
     const [users, setUsers] = useState([])
 
@@ -102,19 +126,28 @@ export const Forms = () => {
                 <FormField>
                     <label>First Name</label>
                     <input type='text' value={name} onChange={(event) => {
-                        setName(event.target.value);
+                        dispatch({
+                            payload: event.target.value,
+                            type: "UPDATE_NAME"
+                        });
                     }} />
                 </FormField>
                 <FormField>
                     <label>Last Name</label>
                     <input type='text' value={lastName} onChange={(event) => {
-                        setLastName(event.target.value);
+                       dispatch({
+                        payload: event.target.value,
+                        type: "UPDATE_LASTNAME"
+                    });
                     }} />
                 </FormField>
                 <FormField>
                     <label>Currencies</label>
                     <Dropdown placeholder='Currencies' search selection options={stateOptions} onChange={(event, data) => {
-                        setCurrency(data.value);
+                        dispatch({
+                            payload: data.value,
+                            type: "UPDATE_CURRENCY"
+                        });
                     }} />
                 </FormField>
                 <Button type='submit'>Submit</Button>
