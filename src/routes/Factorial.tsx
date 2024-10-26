@@ -1,7 +1,9 @@
 import React, { useState, useMemo, useCallback } from "react";
-
+import { useContext } from 'react';
+import { GlobalContext } from '../index';
 
 const computeFactorial = (n: number): number => {
+
     console.log('computeFactorial', n)
 
     if (n === 1 || n === 0) {
@@ -18,6 +20,7 @@ const computeFactorial = (n: number): number => {
 }
 
 export const Factorial = () => {
+    const { name } = useContext(GlobalContext);
     const [num, setNum] = useState(100);
     const [value, setValue] = useState('');
     // n = 5
@@ -47,7 +50,7 @@ export const Factorial = () => {
     console.log('render', value)
 
     return (<>
-        factorial
+        <h1>Bienvenido {name} al factorial</h1>
         <div><h1>fatorial de {num} = {result}</h1></div>
         <button onClick={() => setNum(num + 1)}>factorial</button>
         <div>
