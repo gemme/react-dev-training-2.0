@@ -55,7 +55,6 @@ export const FormsWithCustomHooks = () => {
         },
     });
 
-
     const createUser = async () => {
 
         const data = await asyncMutate({
@@ -119,6 +118,8 @@ export const FormsWithCustomHooks = () => {
             console.error(error);
         }
     }
+    console.log('FormsWithCustomHooks::Forms::testing::provider');
+
 
     return (
         <>

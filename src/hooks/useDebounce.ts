@@ -1,19 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 
 const useDebounce = (_query: string, delay = TIME_OUT) => {
-  const timeout = useRef<NodeJS.Timeout | null>(null);
   const [query, setQuery] = useState(_query);
-  // do not use this version, use  ref instead
-  //let timeout: NodeJS.Timeout | undefined = undefined;
 
   useEffect(() => {
-    if (timeout.current) {
-      clearTimeout(timeout.current);
-    }
-    timeout.current = setTimeout(() => {
+    const timeout = setTimeout(() => {
       setQuery(_query);
-      timeout.current = null;
     }, delay);
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
   }, [_query]);
 
   return { query };

@@ -1,6 +1,5 @@
 import React, { useState, useReducer } from 'react';
 import { Button } from 'semantic-ui-react'
-import { GlobalContext } from '../index';
 import { useContext } from 'react';
 // Redux
 // reducer
@@ -43,7 +42,6 @@ const reducer = (state: State, action: Action) => {
 export const CounterReducer = () => {
     //const [count, setCount] = useState(0);
     const [state, dispatch] = useReducer(reducer, initialState);
-    const { setName, name } = useContext(GlobalContext);
 
     const increase = () => {
         dispatch({
@@ -64,9 +62,6 @@ export const CounterReducer = () => {
             <div><h1>{state.count}</h1></div>
             <button onClick={increase}>Increase</button>
             <button onClick={decrease}>Decrease</button>
-            <Button onClick={() => {
-                setName('Socorro');
-            }}>Change name to Socorro</Button>
         </>
     );
 }

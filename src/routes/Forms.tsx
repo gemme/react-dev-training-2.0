@@ -14,6 +14,7 @@ import {
     Menu,
     Table,
 } from 'semantic-ui-react'
+import { useUserName } from '../providers/UserProvider';
 
 const stateOptions = [
     {
@@ -38,8 +39,8 @@ const stateOptions = [
 // useFormStatus, useActioState  experimental  React 19 version
 
 const API_URL = 'http://localhost:3000/api/users/';
-const initialState= {
-    name:'',
+const initialState = {
+    name: '',
     lastName: '',
     currency: ''
 }
@@ -47,13 +48,13 @@ const reducer = (state: any, action: any) => {
     let newState = state;
     switch (action.type) {
         case 'UPDATE_NAME':
-            newState = {...state, name: action.payload};
+            newState = { ...state, name: action.payload };
             break;
         case 'UPDATE_LASTNAME':
-            newState = {...state, lastName: action.payload};
+            newState = { ...state, lastName: action.payload };
             break;
         case 'UPDATE_CURRENCY':
-            newState = {...state, currency: action.payload};
+            newState = { ...state, currency: action.payload };
             break;
         default:
             return newState;
@@ -65,10 +66,10 @@ export const Forms = () => {
     // const [name, setName] = useState<string>('')
     // const [lastName, setLastName] = useState<string>('')
     // const [currency, setCurrency] = useState<string>('')
-    const [{name, lastName, currency}, dispatch] = useReducer(reducer, initialState)
+    const [{ name, lastName, currency }, dispatch] = useReducer(reducer, initialState)
+    const [users, setUsers] = useState([]);
+    const { setUserName } = useUserName();
 
-
-    const [users, setUsers] = useState([])
 
     const createUser = async () => {
         const response = await fetch(API_URL, {
@@ -86,6 +87,9 @@ export const Forms = () => {
         if (response.ok) {
             const data = await response.json();
             console.log('data', data)
+            setUserName(data.name);
+            //cualquier de los dos modos deberia funcionar
+            // setUserName(name);
         }
     }
 
@@ -113,9 +117,6 @@ export const Forms = () => {
     useEffect(() => {
         getUsers();
     }, [])
-
-
-
     return (
         <>
 
@@ -135,10 +136,10 @@ export const Forms = () => {
                 <FormField>
                     <label>Last Name</label>
                     <input type='text' value={lastName} onChange={(event) => {
-                       dispatch({
-                        payload: event.target.value,
-                        type: "UPDATE_LASTNAME"
-                    });
+                        dispatch({
+                            payload: event.target.value,
+                            type: "UPDATE_LASTNAME"
+                        });
                     }} />
                 </FormField>
                 <FormField>

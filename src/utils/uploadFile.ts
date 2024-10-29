@@ -3,6 +3,7 @@ interface UploadFile {
   method?: "POST";
   url?: string;
   handleProgress: (e: any) => void;
+  signal: AbortSignal;
 }
 
 export const uploadFile = ({
@@ -10,6 +11,7 @@ export const uploadFile = ({
   method = "POST",
   url = "http://localhost:3000/api/fileupload",
   handleProgress,
+  signal,
 }: UploadFile) => {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -31,6 +33,16 @@ export const uploadFile = ({
     xhr.onerror = () => {
       reject(new Error("Failed uploading the file"));
     };
+
+    /*
+    ()=>{
+      xhr.abort()
+    }
+    */
+    signal.addEventListener("abort", () => {
+      xhr.abort();
+      reject(new Error("Uploading file aborted"));
+    });
     xhr.onloadend = () => {
       //setLoading(false);
     };

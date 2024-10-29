@@ -1,9 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback, useMemo } from 'react';
 import { uploadFile } from '../utils/uploadFile';
+
+
 
 export const UploadFile = () => {
     const [progress, setProgress] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    //const controllerRef = useRef(new AbortController());
+    // useCallback no funciona tal vez por la implementacion
+    /* const controllerFn = useCallback(() => {
+        console.log('controllerFn::useCallback');
+        const controller = new AbortController()
+        return controller;
+    }, []); */
+    const constrollerMemo = useMemo(() => {
+        return new AbortController()
+    }, []);
+    //const controller = new AbortController();
+    // controller.signal
+    // cancelar la promise
+    // controller.signal.abort()
+    // cancelar la peticion
+    // xhr.abort()
     return (
         <>
             UploadFile
@@ -29,23 +48,33 @@ export const UploadFile = () => {
                         body: formData,
                         handleProgress: (e) => {
                             setProgress(e.loaded * 100 / e.total);
-                        }
+                        },
+                        //signal: controllerRef.current.signal
+                        //signal: controllerFn().signal
+                        signal: constrollerMemo.signal
                     })
                     console.log('file uploaded', data);
                 } catch (error: any) {
                     console.log(error.message);
+                    setError(error.message);
                 } finally {
                     setLoading(false);
 
                 }
 
             }} />
-            <>{loading && progress < 100
+            <>{loading
                 ?
                 <>
                     <progress value={progress} max='100' />{progress.toFixed(0) + '%'}
+                    <button onClick={() => {
+                        console.log('abort action');
+                        //controllerRef.current.abort();
+                        //controllerFn().abort();
+                        constrollerMemo.abort();
+                    }}>Cancel</button>
                 </>
-                : progress === 100 && <span>File Upload succesfully</span>
+                : !loading && !error && <span>File Upload succesfully</span>
             }
 
             </>

@@ -9,7 +9,7 @@ export const SearchPerson = () => {
 
   const [persons, setPersons] = useState([]);
 
-  const { query } = useDebounce(search, 1500);
+  const { query } = useDebounce(search, 250);
 
   useEffect(() => {
     fetch(`${API_URL}${query}`)

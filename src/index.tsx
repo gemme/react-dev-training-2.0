@@ -19,13 +19,9 @@ import { Converter } from "./routes/Converter";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import "./index.css";
 import { UsersFormView } from './routes/UsersFormView';
-import { createContext, useState } from 'react';
-import { Button } from 'semantic-ui-react';
-
-export const GlobalContext = createContext<any>({
-    name: '',
-    setName: () => { }
-});
+import { RenderProps } from './routes/RenderProps';
+import { CounterProvider } from './providers/CounterProvider';
+import { UserProvider } from "./providers/UserProvider";
 
 const router = createBrowserRouter([
     {
@@ -85,6 +81,10 @@ const router = createBrowserRouter([
                 path: "users-create/",
                 element: <UsersFormView />,
             },
+            {
+                path: "render-props/",
+                element: <RenderProps />,
+            },
         ],
     },
 ]);
@@ -93,16 +93,13 @@ const domNode = document.getElementById('root')!;
 const root = ReactDOM.createRoot(domNode);
 
 const App = () => {
-    const [name, setName] = useState('Ernesto');
     return (
         <>
-            <Button onClick={() => setName('Victor')}>change name</Button>
-            <GlobalContext.Provider value={{
-                name,
-                setName,
-            }}>
-                <RouterProvider router={router} />
-            </GlobalContext.Provider>
+            <UserProvider>
+                <CounterProvider>
+                    <RouterProvider router={router} />
+                </CounterProvider>
+            </UserProvider>
         </>
 
     )

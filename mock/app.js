@@ -75,8 +75,9 @@ app.get("/api/users", (req, res) => {
 
 app.post("/api/users", (req, res) => {
   console.log(req.body);
-  users.push({ id: faker.string.uuid(), ...req.body });
-  res.json(users);
+  const user = { id: faker.string.uuid(), ...req.body };
+  users.push(user);
+  res.json(user);
 });
 
 const persons = [];

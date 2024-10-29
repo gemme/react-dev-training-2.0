@@ -1,8 +1,12 @@
 import React from 'react';
+import { useCounter } from '../providers/CounterProvider';
+import { useUserName } from '../providers/UserProvider';
 
 import { Link, Outlet } from 'react-router-dom'
 
 export const Root = () => {
+    const { count } = useCounter();
+    const { userName, setUserName } = useUserName();
     return (
         <>
             <div id="sidebar">
@@ -46,6 +50,9 @@ export const Root = () => {
                 </nav>
             </div>
             <div id="detail">
+                {userName && <h1>Bienvenido:  {userName}</h1>}
+                <h1>Global Count {count}</h1>
+
                 <Outlet />
             </div>
         </>

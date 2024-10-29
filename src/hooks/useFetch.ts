@@ -15,7 +15,6 @@ export const useFetch = <T>(url: string) => {
         throw new Error("Error in the response");
       })
       .then(async (data) => {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
         setData(data);
       })
       .catch((error) => {
