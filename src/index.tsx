@@ -23,8 +23,6 @@ const router = createBrowserRouter([
 
 ]);
 
-// slslkdjsoisdujlaskdjlkf
-//lskdjfslkdfjlk
 
 const domNode = document.getElementById('root')!;
 const root = ReactDOM.createRoot(domNode);
@@ -35,3 +33,6 @@ root.render(
     </React.StrictMode>
     ,
 )
+
+// render 2 veces
+// build

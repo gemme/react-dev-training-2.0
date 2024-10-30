@@ -5,3 +5,14 @@
     "@babel/preset-typescript"
   ]
 }
+
+/*
+import React from 'react';
+
+jsx
+return (
+  <div></div>
+)
+
+React.createElement(div,{},children)
+*/
