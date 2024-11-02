@@ -12,4 +12,12 @@ export class ProductService extends BaseService {
 
     return await this.get({ headers, params });
   }
+
+  async getProductByHandle({ params }: GetProducts) {
+    const headers = {
+      "content-type": "application/json",
+    };
+
+    return await this.get({ headers, params });
+  }
 }

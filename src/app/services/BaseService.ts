@@ -45,6 +45,7 @@ export class BaseService {
       throw new Error("Response error: " + response.status);
     } catch (error) {
       console.log(error);
+      //TODO: validate if Error needs to be propagated
     }
   }
 

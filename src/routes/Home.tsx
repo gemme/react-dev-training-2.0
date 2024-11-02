@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import './Home.css';
-import { Products } from '../app/entities/Products'
+import { ProductsContainer } from '../app/entities/Products'
 
 export const Home = () => {
 
@@ -10,7 +10,9 @@ export const Home = () => {
         <div>
             <h1>Home</h1>
             <p>Welcome to the React Advanced Learning Kit!</p>
-            <Products />
+            <ProductsContainer />
         </div>
     )
 }
+
+export default Home;

@@ -26,7 +26,14 @@ export const Root = () => {
     return (
         <>
             <div id="sidebar">
-                <h1>Welcome</h1>
+
+                <nav>
+                    <ul>
+                        <li>
+                            <Link to={'/'}>home</Link>
+                        </li>
+                    </ul>
+                </nav>
             </div>
             <div id="detail">
                 <Outlet />
