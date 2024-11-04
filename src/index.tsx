@@ -54,21 +54,24 @@ const withLazySuspense = function (loader: any) {
 
 const Home = withLazySuspense(() => import('./routes/Home'));
 const ProductDetails = withLazySuspense(() => import('./routes/ProductDetails'));
+const CartDetails = lazy(() => import('./routes/CartDetails'));
 
 const App = () => {
 
     return (
-        <>
+        <div>
             <Root />
-            <Suspense fallback={<>loading...</>}>
-                <Routes>
-                    <Route errorElement={<ErrorBoundary />} path="/" element={< Navigate to={'/home'} />} />
-                    < Route errorElement={<ErrorBoundary />} path="/home" element={<Home />} />
-                    < Route errorElement={<ErrorBoundary />} path="/product-details/:handle" element={<ProductDetails />} />
-                </Routes>
-            </Suspense>
-
-        </>
+            <div id="detail">
+                <Suspense fallback={<>loading...</>}>
+                    <Routes>
+                        <Route errorElement={<ErrorBoundary />} path="/" element={< Navigate to={'/home'} />} />
+                        < Route errorElement={<ErrorBoundary />} path="/home" element={<Home />} />
+                        < Route errorElement={<ErrorBoundary />} path="/product-details/:handle" element={<ProductDetails />} />
+                        < Route errorElement={<ErrorBoundary />} path="/cart" element={<CartDetails />} />
+                    </Routes>
+                </Suspense>
+            </div>
+        </div>
 
     )
 }

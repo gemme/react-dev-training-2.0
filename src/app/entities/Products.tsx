@@ -41,7 +41,7 @@ export const Products = ({ products, error, loading }: ProductsProps) => {
               }).format(Number(price.amount))}
               height={200}
               src={product.featuredImage.url}
-              description={product.description}
+              title={product.title}
             />
           </Link>
 

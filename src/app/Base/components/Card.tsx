@@ -5,6 +5,7 @@ interface CardProps {
     src: string;
     height: number;
     description?: string;
+    title?: string;
     price?: string;
     width?: number;
 }
@@ -14,7 +15,8 @@ export const Card = ({
     description,
     height,
     width = 300,
-    price
+    price,
+    title
 }: CardProps) => {
     return (
         <div style={{
@@ -24,8 +26,10 @@ export const Card = ({
                 <img src={src} height={height + 'px'} />
             </div>
             <div>
+                <h5>{title}</h5>
+            </div>
+            <div>
                 <span>{price}</span>
-
             </div>
             <div>
                 <span>{description}</span>
